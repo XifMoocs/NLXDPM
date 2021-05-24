@@ -14,12 +14,12 @@
 <title>${title}</title>
 </head>
 <body>
-	<div class="container">
+	<div class="container center">
 		<div class="form-container">
 			<div class="tab-control">
 				<h3 class="tab-control-btn register">${description}</h3>
 			</div>
-			<div class="register-form form active">
+			<div class="register-form bg-light form active">
 				<form action="<c:url value="/users${status}" />"
 					enctype="multipart/form-data" method="POST">
 					<c:choose>
@@ -45,7 +45,7 @@
 					</label> <input type="file" accept="image/*" name="avatar" id="image"
 						class="image-file">
 
-					<button type="submit" class="btn btn-login border">${btnSubmit}</button>
+					<button type="submit" class="btn bg-dark btn-login border">${btnSubmit}</button>
 
 					<a href="<c:url value="${btnGoBack}" />"
 						class="btn btn-login border"

@@ -14,26 +14,21 @@
 <title>Login</title>
 </head>
 <body>
-	<div class="container">
-		<div class="form-container">
-			<h2 class="form-title">Star Messenger</h2>
-			<div class="tab-control">
-				<h3 class="active tab-control-btn login">Sign in</h3>
-				<h3 class="tab-control-btn register">
-					<a href="<c:url value="/users/register" />" style="color: white;">Sign
-						up</a>
-				</h3>
-			</div>
-			<div class="login-form form active">
-				<form action="<c:url value="/login" />" method="POST">
-					<input type="text" class="txt-input border" placeholder="Username"
-						name="username"> <input type="password"
-						class="txt-input border" placeholder="Password" name="password">
-					<button type="submit" class="btn btn-login border">Sign in</button>
-				</form>
-			</div>
+	<div class="container center">
+		<div class="form-container bx-shadow">
+		  <div class="tab-control bg-light border">
+			<h3 class="active tab-control-btn login">Login</h3>
+			<h3 class="tab-control-btn register">
+			  <a href="<c:url value="/users/register" />" style="color: whitesmoke">Register</a>
+			</h3>
+		  </div>
+		  <div class="login-form bg-light form active">
+			<form action="<c:url value="/login" />" method="POST">
+			  <input type="text" class="txt-input border" placeholder="User name" name="username">
+			  <input type="password" class="txt-input border" placeholder="Password" name="password"> <button type="submit" class="btn btn-login bg-dark border">Login</button>
+			</form>
+		  </div>
 		</div>
-	</div>
-
+	  </div>
 </body>
 </html>

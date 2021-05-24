@@ -60,7 +60,7 @@ function setReceiver(element) {
 	if (document.getElementById('status-' + receiver).classList.contains('online')) {
 		status = 'online';
 	}
-	var rightSide = '<div class="user-contact">' + '<div class="back">'
+		var rightSide = '<div class="user-contact">' + '<div class="back">'
 		+ '<i class="fa fa-arrow-left"></i>'
 		+ '</div>'
 		+ '<div class="user-contain">'
@@ -73,8 +73,8 @@ function setReceiver(element) {
 		+ '<span class="user-name">' + receiver + '</span>'
 		+ '</div>'
 		+ '</div>'
-		+ '<div class="setting">'
-		+ '<i class="fa fa-cog"></i>'
+		+ '<div class="dropdown">'
+		+ '<i class="fa fa-cog dropbtn"></i>'
 		+ '</div>'
 		+ '</div>'
 		+ '<div class="list-messages-contain">'
@@ -110,35 +110,7 @@ function makeFriend(rightSide) {
 			return data.json();
 		})
 		.then(data => {
-			var status = '';
-			if (document.getElementById('status-' + receiver).classList.contains('online')) {
-				status = 'online';
-			}
-		
-			if (data.status == false && data.owner == username && data.owner != "any") {
-				rightSide = '<div class="user-contact">' + '<div class="back">'
-					+ '<i class="fa fa-arrow-left"></i>'
-					+ '</div>'
-					+ '<div class="user-contain">'
-					+ '<div class="user-img">'
-					+ '<img src="' + receiverAvatar + '" '
-					+ 'alt="Image of user">'
-					+ '<div class="user-img-dot '+ status +'"></div>'
-					+ '</div>'
-					+ '<div class="user-info">'
-					+ '<span class="user-name">' + receiver + '</span>'
-					+ '</div>'
-					+ '</div>'
-					+ '<span style="font-size:1.8rem">Sent Request</span>'
-					+ '</form>'
-					+ '</div>'
-					+ '<div class="list-messages-contain">'
-					+ '<ul id="chat" class="list-messages">'
-					+ '</ul>'
-					+ '</div>';
-					
-					document.getElementById("receiver").innerHTML = rightSide;
-			} else if (data.status == false && data.owner != username && data.owner != "any") {
+			if (data.status == false && data.owner == username) {
 				rightSide = '<div class="user-contact">' + '<div class="back">'
 					+ '<i class="fa fa-arrow-left"></i>'
 					+ '</div>'
@@ -152,53 +124,91 @@ function makeFriend(rightSide) {
 					+ '<span class="user-name">' + receiver + '</span>'
 					+ '</div>'
 					+ '</div>'
+					+ '<div class="dropdown">'
+					+ '<i class="fa fa-cog dropbtn" onclick="secMenu()"></i>'
+					+ '<div id="dropDown_RS" class="dropdown-content border">'
+					+ '<a href="#">Sent Request</a>'
+					+ '</div>'
+					+ '</div>'
+					+ '</form>'
+					+ '</div>'
+					+ '<div class="list-messages-contain">'
+					+ '<ul id="chat" class="list-messages">'
+					+ '</ul>'
+					+ '</div>';
+
+				document.getElementById("receiver").innerHTML = rightSide;
+			} else if (data.status == false && data.owner != username) {
+				rightSide = '<div class="user-contact">' + '<div class="back">'
+					+ '<i class="fa fa-arrow-left"></i>'
+					+ '</div>'
+					+ '<div class="user-contain">'
+					+ '<div class="user-img">'
+					+ '<img src="' + receiverAvatar + '" '
+					+ 'alt="Image of user">'
+					+ '<div class="user-img-dot ' + status + '"></div>'
+					+ '</div>'
+					+ '<div class="user-info">'
+					+ '<span class="user-name">' + receiver + '</span>'
+					+ '</div>'
+					+ '</div>'
+					+ '<div class="dropdown">'
+					+ '<i class="fa fa-cog dropbtn" onclick="secMenu()"></i>'
+					+ '<div id="dropDown_RS" class="dropdown-content border">'
 					+ '<form action="http://' + window.location.host + '/chat" method="post" >'
 					+ '<input type="hidden" name="sender" value="' + username + '">'
 					+ '<input type="hidden" name="receiver" value="' + receiver + '">'
 					+ '<input type="hidden" name="status" value="true">'
 					+ '<input type="hidden" name="isAccept" value="true">'
-					+ '<input class="btn" type="submit" value="Accept Friend Request">'
+					+ '<div class="frm-side"><input type="submit" value="Accept Friend Request"></div>'
 					+ '</form>'
+					+ '</div>'
+					+ '</div>'
 					+ '</div>'
 					+ '<div class="list-messages-contain">'
 					+ '<ul id="chat" class="list-messages">'
 					+ '</ul>'
 					+ '</div>';
-					document.getElementById("receiver").innerHTML = rightSide;
-					
-			}else if(data.status == false && data.sender == "any" && data.receiver == "any"){
-				rightSide = '<div class="user-contact">' + '<div class="back">'
-					+ '<i class="fa fa-arrow-left"></i>'
-					+ '</div>'
-					+ '<div class="user-contain">'
-					+ '<div class="user-img">'
-					+ '<img src="' + receiverAvatar + '" '
-					+ 'alt="Image of user">'
-					+ '<div class="user-img-dot ' + status + '"></div>'
-					+ '</div>'
-					+ '<div class="user-info">'
-					+ '<span class="user-name">' + receiver + '</span>'
-					+ '</div>'
-					+ '</div>'
-					+ '<form action="http://' + window.location.host + '/chat" method="post" >'
-					+ '<input type="hidden" name="sender" value="' + username + '">'
-					+ '<input type="hidden" name="receiver" value="' + receiver + '">'
-					+ '<input type="hidden" name="status" value="false">'
-					+ '<input type="hidden" name="isAccept" value="false">'
-					+ '<input class="btn" type="submit" value="Add Friend">'
-					+ '</form>'
-					+ '</div>'
-					+ '<div class="list-messages-contain">'
-					+ '<ul id="chat" class="list-messages">'
-					+ '</ul>'
-					+ '</div>';
-					document.getElementById("receiver").innerHTML = rightSide;
-					
+				document.getElementById("receiver").innerHTML = rightSide;
 			}
-		})
-		.catch(ex => console.log(ex));
-}
 
+		})
+		.catch(ex => {
+			rightSide = '<div class="user-contact">' + '<div class="back">'
+				+ '<i class="fa fa-arrow-left"></i>'
+				+ '</div>'
+				+ '<div class="user-contain">'
+				+ '<div class="user-img">'
+				+ '<img src="' + receiverAvatar + '" '
+				+ 'alt="Image of user">'
+				+ '<div class="user-img-dot ' + status + '"></div>'
+				+ '</div>'
+				+ '<div class="user-info">'
+				+ '<span class="user-name">' + receiver + '</span>'
+				+ '</div>'
+				+ '</div>'
+				+ '<div class="dropdown">'
+				+ '<i class="fa fa-cog dropbtn" onclick="secMenu()"></i>'
+				+ '<div id="dropDown_RS" class="dropdown-content border">'
+				+ '<form action="http://' + window.location.host + '/chat" method="post" >'
+				+ '<input type="hidden" name="sender" value="' + username + '">'
+				+ '<input type="hidden" name="receiver" value="' + receiver + '">'
+				+ '<input type="hidden" name="status" value="false">'
+				+ '<input type="hidden" name="isAccept" value="false">'
+				+ '<div class="frm-side"><input type="submit" value="Add Friend"></div>'
+				+ '</form>'
+				+ '</form>'
+				+ '</div>'
+				+ '</div>'
+				+ '</div>'
+				+ '<div class="list-messages-contain">'
+				+ '<ul id="chat" class="list-messages">'
+				+ '</ul>'
+				+ '</div>';
+
+			document.getElementById("receiver").innerHTML = rightSide;
+		});
+}
 function handleResponsive() {
 	back = document.querySelector(".back");
 	rightSide = document.querySelector(".right-side");
@@ -472,4 +482,23 @@ function goLastestMsg() {
 	try {
 		last.scrollIntoView();
 	} catch (ex) { }
+}
+function dropMenu() {
+	document.getElementById("myDropdown").classList.toggle("show");
+}
+function secMenu() {
+	document.getElementById("dropDown_RS").classList.toggle("show");
+
+}
+window.onclick = function(event) {
+	if (!event.target.matches('.dropbtn')) {
+		var dropdowns = document.getElementsByClassName("dropdown-content");
+		var i;
+		for (i = 0; i < dropdowns.length; i++) {
+			var openDropdown = dropdowns[i];
+			if (openDropdown.classList.contains('show')) {
+				openDropdown.classList.remove('show');
+			}
+		}
+	}
 }

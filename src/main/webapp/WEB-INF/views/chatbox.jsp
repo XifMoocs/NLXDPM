@@ -21,22 +21,31 @@
 	<p id="userAvatar" style="display: none">
 		<c:url value="/files/${user.username}/${user.avatar}" />
 	</p>
-	<div class="container">
+	<div class="container center">
 		<div class="conversation-container">
 			<div class="left-side active">
-				<h2>
-					<a href="<c:url value="/users/update"/>"
-						style="text-decoration: none; color: white;margin-right: 3rem;">Welcome
-						${user.username}</a>
-					:
-					<a href="<c:url value="/users/logout"/>"
-						style="text-decoration: none; color: white; margin-left: 3rem;">Logout</a>
-				</h2>
-				<div class="tab-control">
-					<i class="fa fa-comment active"></i> <i class="fa fa-comments"></i>
+				<div class="user-contain"
+					style="color: white; margin-left: 2rem; float: left">
+					<div class="user-img">
+						<img
+							src="<c:url value="./files/${user.username}/${user.avatar}" />">
+					</div>
+					<div class="user-info" style="padding-top: 1rem;">
+						<span class="user-name">${user.username}</span>
+					</div>
+				</div>
+				<div class="dropdown">
+					<i class="fa fa-ellipsis-h dropbtn" onclick="dropMenu()"
+						aria-hidden="true"></i>
+					<div id="myDropdown" class="dropdown-content border">
+
+						<a href="<c:url value="/users/update"/>">Change Password</a> <a
+							href="<c:url value="/users/logout"/>">Logout</a>
+					</div>
 				</div>
 				<div class="list-user-search">
-					<input type="text" class="txt-input" placeholder="Search..." onkeyup="searchUser(this)">
+					<input type="text" class="txt-input" placeholder="Search..."
+						onkeyup="searchUser(this)">
 				</div>
 				<div class="list-user">
 					<ul>
