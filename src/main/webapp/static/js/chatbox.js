@@ -60,7 +60,7 @@ function setReceiver(element) {
 	if (document.getElementById('status-' + receiver).classList.contains('online')) {
 		status = 'online';
 	}
-		var rightSide = '<div class="user-contact">' + '<div class="back">'
+	var rightSide = '<div class="user-contact">' + '<div class="back">'
 		+ '<i class="fa fa-arrow-left"></i>'
 		+ '</div>'
 		+ '<div class="user-contain">'
@@ -110,7 +110,12 @@ function makeFriend(rightSide) {
 			return data.json();
 		})
 		.then(data => {
-			if (data.status == false && data.owner == username) {
+			var status = '';
+			if (document.getElementById('status-' + receiver).classList.contains('online')) {
+				status = 'online';
+			}
+
+			if (data.status == false && data.owner == username && data.owner != "any") {
 				rightSide = '<div class="user-contact">' + '<div class="back">'
 					+ '<i class="fa fa-arrow-left"></i>'
 					+ '</div>'
@@ -124,12 +129,7 @@ function makeFriend(rightSide) {
 					+ '<span class="user-name">' + receiver + '</span>'
 					+ '</div>'
 					+ '</div>'
-					+ '<div class="dropdown">'
-					+ '<i class="fa fa-cog dropbtn" onclick="secMenu()"></i>'
-					+ '<div id="dropDown_RS" class="dropdown-content border">'
-					+ '<a href="#">Sent Request</a>'
-					+ '</div>'
-					+ '</div>'
+					+ '<div class="add-status bg-dark border">Sent Request</div>'
 					+ '</form>'
 					+ '</div>'
 					+ '<div class="list-messages-contain">'
@@ -138,7 +138,7 @@ function makeFriend(rightSide) {
 					+ '</div>';
 
 				document.getElementById("receiver").innerHTML = rightSide;
-			} else if (data.status == false && data.owner != username) {
+			} else if (data.status == false && data.owner != username && data.owner != "any") {
 				rightSide = '<div class="user-contact">' + '<div class="back">'
 					+ '<i class="fa fa-arrow-left"></i>'
 					+ '</div>'
@@ -170,44 +170,43 @@ function makeFriend(rightSide) {
 					+ '</ul>'
 					+ '</div>';
 				document.getElementById("receiver").innerHTML = rightSide;
+			} else if (data.status == false && data.sender == "any" && data.receiver == "any") {
+				rightSide = '<div class="user-contact">' + '<div class="back">'
+					+ '<i class="fa fa-arrow-left"></i>'
+					+ '</div>'
+					+ '<div class="user-contain">'
+					+ '<div class="user-img">'
+					+ '<img src="' + receiverAvatar + '" '
+					+ 'alt="Image of user">'
+					+ '<div class="user-img-dot ' + status + '"></div>'
+					+ '</div>'
+					+ '<div class="user-info">'
+					+ '<span class="user-name">' + receiver + '</span>'
+					+ '</div>'
+					+ '</div>'
+					+ '<div class="dropdown">'
+					+ '<i class="fa fa-cog dropbtn" onclick="secMenu()"></i>'
+					+ '<div id="dropDown_RS" class="dropdown-content border">'
+					+ '<form action="http://' + window.location.host + '/chat" method="post" >'
+					+ '<input type="hidden" name="sender" value="' + username + '">'
+					+ '<input type="hidden" name="receiver" value="' + receiver + '">'
+					+ '<input type="hidden" name="status" value="false">'
+					+ '<input type="hidden" name="isAccept" value="false">'
+					+ '<div class="frm-side"><input type="submit" value="Add Friend"></div>'
+					+ '</form>'
+					+ '</form>'
+					+ '</div>'
+					+ '</div>'
+					+ '</div>'
+					+ '<div class="list-messages-contain">'
+					+ '<ul id="chat" class="list-messages">'
+					+ '</ul>'
+					+ '</div>';
+
+				document.getElementById("receiver").innerHTML = rightSide;
 			}
-
 		})
-		.catch(ex => {
-			rightSide = '<div class="user-contact">' + '<div class="back">'
-				+ '<i class="fa fa-arrow-left"></i>'
-				+ '</div>'
-				+ '<div class="user-contain">'
-				+ '<div class="user-img">'
-				+ '<img src="' + receiverAvatar + '" '
-				+ 'alt="Image of user">'
-				+ '<div class="user-img-dot ' + status + '"></div>'
-				+ '</div>'
-				+ '<div class="user-info">'
-				+ '<span class="user-name">' + receiver + '</span>'
-				+ '</div>'
-				+ '</div>'
-				+ '<div class="dropdown">'
-				+ '<i class="fa fa-cog dropbtn" onclick="secMenu()"></i>'
-				+ '<div id="dropDown_RS" class="dropdown-content border">'
-				+ '<form action="http://' + window.location.host + '/chat" method="post" >'
-				+ '<input type="hidden" name="sender" value="' + username + '">'
-				+ '<input type="hidden" name="receiver" value="' + receiver + '">'
-				+ '<input type="hidden" name="status" value="false">'
-				+ '<input type="hidden" name="isAccept" value="false">'
-				+ '<div class="frm-side"><input type="submit" value="Add Friend"></div>'
-				+ '</form>'
-				+ '</form>'
-				+ '</div>'
-				+ '</div>'
-				+ '</div>'
-				+ '<div class="list-messages-contain">'
-				+ '<ul id="chat" class="list-messages">'
-				+ '</ul>'
-				+ '</div>';
-
-			document.getElementById("receiver").innerHTML = rightSide;
-		});
+		.catch(ex => console.log(ex));
 }
 function handleResponsive() {
 	back = document.querySelector(".back");
@@ -335,7 +334,7 @@ function sendAttachments() {
 		var message = buildMessageToJson(messageContent, messageType);
 		websocket.send(JSON.stringify(message));
 		websocket.send(file);
-		
+
 		if (messageType.startsWith("audio")) {
 			message.message = '<audio controls>'
 				+ '<source src="' + URL.createObjectURL(file) + '" type="' + messageType + '">'
@@ -344,7 +343,7 @@ function sendAttachments() {
 			message.message = '<video width="400" controls>'
 				+ '<source src="' + URL.createObjectURL(file) + '" type="' + messageType + '">'
 				+ '</video>';
-		}else if (messageType.startsWith("image")) {
+		} else if (messageType.startsWith("image")) {
 			message.message = '<img src="' + URL.createObjectURL(file) + '" alt="">';
 		}
 		else {
